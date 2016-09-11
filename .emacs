@@ -1,11 +1,29 @@
-(global-linum-mode t)
+(global-linum-mode t) ;; Show line numbers
 
-(require 'package) ;; You might already have this line
-
-(package-initialize) ;; You might already have this line
+(require 'package)
+(package-initialize)
 
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+
+; list the packages you want
+(setq package-list '(ensime 
+                     helm 
+                     auctex 
+                     auctex-latexmk 
+                     dracula-theme))
+
+; activate all the packages (in particular autoloads)
+(package-initialize)
+
+; fetch the list of packages available 
+(unless package-archive-contents
+  (package-refresh-contents))
+
+; install the missing packages
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
 
 (require 'ensime)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
@@ -18,7 +36,6 @@
       helm-recentf-fuzzy-match    t)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 (helm-mode 1)
-
 
 (load-theme 'dracula t)
 	
